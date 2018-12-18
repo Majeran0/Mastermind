@@ -6,24 +6,24 @@ using System.Threading.Tasks;
 using System.IO;
 
 namespace mastermind {
-	class Highscores : Game {
-		private readonly string scores = File.ReadAllText(@"highscores.txt");
-		private string score;
+	public static class Highscores {
+		private static readonly string scores = File.ReadAllText(@"highscores.txt");
+		private static string score;
 
-		public void DisplayScores() {
+		public static void DisplayScores() {
 			Console.WriteLine(scores);
 		}
 
-		public void AddScore(string name) {
+		public static void AddScore(this Game g, string name) {
 			if (string.IsNullOrWhiteSpace(name)) {
 				throw new ArgumentException("Pusta nazwa", nameof(name));
 			} else {
-				score = $"{name} : {current} tur";
+				score = $"{name} : {g.current} tur";
 				File.AppendAllText(@"highscores.txt", score + Environment.NewLine);
 			}
 		}
 
-		public void ResetScores() {
+		public static void ResetScores() {
 			File.WriteAllText(@"highscores.txt", string.Empty);
 		}
 	}

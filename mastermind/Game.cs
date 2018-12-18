@@ -18,13 +18,12 @@ namespace mastermind {
 		public List<int> secret;
 		private List<List<int>> questions;
 		private List<List<int>> answers;
-		protected private int colors;
+		public int colors;
 		private bool is_initialized = false;
-		protected private int current;
+		public int current;
 		private int turns_left;
 
 		private readonly Config config = new Config();
-		readonly Generator generator = new Generator();
 
 		public void Launch() {
 			if (is_initialized) return;
@@ -53,7 +52,7 @@ namespace mastermind {
 				}
 
 			}
-			generator.GenerateSecret();
+			this.GenerateSecret();
 		}
 		private List<int> GetLastQuestion() {
 			return questions.Last(x => x.All(y => y != 0));

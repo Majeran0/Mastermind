@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace mastermind {
-	internal class Generator : Game {
+	public static class Generator {
 
 		private static readonly Random rand = new Random();
 
-		public void GenerateSecret() {
-			for (int i = 0; i < colors; i++) secret.Add(rand.Next(1, colors));
+		public static void GenerateSecret(this Game g) {
+			for (int i = 0; i < g.colors; i++) g.secret.Add(rand.Next(1, g.colors));
 		}
 	}
 }
