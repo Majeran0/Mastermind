@@ -72,7 +72,7 @@ namespace mastermind {
 
 		private void GenerateAnswer() {
 			var last_question = GetLastQuestion();
-			List<int> answer = new List<int>(4)
+			List<int> answer = new List<int>()
 			{
 				0,
 				0,
