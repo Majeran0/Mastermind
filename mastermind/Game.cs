@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace mastermind {
-
-
 	public class Game {
 		private static Game Instance = null;
 		protected Game() { }
 
-		public static Game getInstance() {
+		public static Game GetInstance() {
 			if (Instance == null) Instance = new Game();
 			return Instance;
 		}
@@ -22,25 +20,25 @@ namespace mastermind {
 		private List<List<int>> answers;
 		protected private int colors;
 		private bool is_initialized = false;
-		private int current;
+		protected private int current;
 		private int turns_left;
 
 		private readonly Config config = new Config();
 		readonly Generator generator = new Generator();
 
-		public void launch() {
+		public void Launch() {
 			if (is_initialized) return;
-			secret = new List<int>(config.MaxColors);                    //TODO pobieranie układu z SecretGenerator.cs
+			secret = new List<int>(config.MaxColors);
 			questions = new List<List<int>>(config.MaxTurns);
 			answers = new List<List<int>>(config.MaxTurns);
-			for (int i = 0; i < config.MaxTurns; i++) {               //TODO X=Config.MaxTurns Y=Config.MaxColors
+			for (int i = 0; i < config.MaxTurns; i++) {
 				questions.Add(new List<int>(config.MaxColors));
 				answers.Add(new List<int>(config.MaxColors));
 			}
 			is_initialized = true;
 		}
 
-		public void start() {
+		public void Start() {
 			current = 0;
 			colors = config.MaxColors;
 			turns_left = config.MaxTurns;
@@ -49,32 +47,32 @@ namespace mastermind {
 			for (int i = 0; i < config.MaxTurns; i++) {
 				questions[i].Clear();
 				answers[i].Clear();
-				for (int j = 0; j < 4; j++) {
+				for (int j = 0; j < config.MaxColors; j++) {
 					questions[j].Add(0);
 					answers[i].Add(0);
 				}
 
 			}
-			generator.generateSecret();
+			generator.GenerateSecret();
 		}
-		private List<int> getLastQuestion() {
+		private List<int> GetLastQuestion() {
 			return questions.Last(x => x.All(y => y != 0));
 		}
 
-		public bool isWin() {
-			return getLastQuestion().SequenceEqual(secret);
+		public bool IsWin() {
+			return GetLastQuestion().SequenceEqual(secret);
 		}
 
-		public bool isLose() {
-			return getCurrentTurns() == 0 ? true : false;
+		public bool IsLose() {
+			return GetCurrentTurns() == 0 ? true : false;
 		}
 
-		public List<int> getLastAnswer() {
+		public List<int> GetLastAnswer() {
 			return answers.Last();
 		}
 
-		private void generateAnswer() {
-			var last_question = getLastQuestion();
+		private void GenerateAnswer() {
+			var last_question = GetLastQuestion();
 			List<int> answer = new List<int>(4)
 			{
 				0,
@@ -83,57 +81,42 @@ namespace mastermind {
 				0
 			};
 
-			for (int i = 0; i < 4; i++) {
+			for (int i = 0; i < config.MaxColors; i++) {
 				if (last_question[i] == secret[i]) answer[i] = 2;
 			}
 
-			for (int i = 0; i < 4; i++) {
-				for (int j = 0; j < 4; j++) {
+			for (int i = 0; i < config.MaxColors; i++) {
+				for (int j = 0; j < config.MaxColors; j++) {
 					if (answer[i] != 2 && last_question[i] == secret[j] && i != j) answer[i] = 1;
 				}
 			}
 
-			if (answer.Count() != 4) throw new Exception("Błąd! Odpowiedź różna od 4 !");
+			if (answer.Count() != config.MaxColors) throw new Exception("Błąd! Odpowiedź różna od maxymalnej liczby znaków!");
 			answers.Add(answer);
 			turns_left--;
 		}
 
-		public void addQuestion(string question) {
-			if (question == null) throw new Exception("Puste zapytanie !");
-			if (question.Length != 4) throw new Exception("Zapytanie musi mieć dokładnie 4 liczby!");
+		public void AddQuestion(string question) {
+			if (question == null) throw new Exception("Puste zapytanie!");
+			if (question.Length != config.MaxColors) throw new Exception("Zapytanie ma złą liczbę znaków!");
 			var is_digits_only = question.All(x => x >= '1' && x <= '8');
 			if (!is_digits_only) throw new Exception("Zapytanie może zawierać tylko liczby z zakresu 1-8!");
 
-			//questions.Add(question.Cast<int>().ToList()); // mozliwe uzycie arraylist
-			List<int> i_question = new List<int>(4);
-			foreach (char sign in question) i_question.Add((int)sign - 48); // 49 to '1'
+
+			List<int> i_question = new List<int>(config.MaxColors);
+			foreach (char sign in question) i_question.Add((int)sign);
 			questions.Add(i_question);
 			current++;
 
-			generateAnswer();
+			GenerateAnswer();
 		}
 
-		public int getCurrentTurns() {
+		public int GetCurrentTurns() {
 			return this.turns_left;
 		}
 
-		public static void updateTurns(int turns) {
-			int old_top = Console.CursorTop;
-			int old_left = Console.CursorLeft;
 
-			Console.CursorTop = 0;
-			Console.CursorLeft = Console.WindowWidth - 3;
-			Console.Write(" ");
-			Console.Write(" ");
-
-			Console.CursorLeft = Console.WindowWidth - 3;
-			Console.Write(turns);
-
-			Console.CursorTop = old_top;
-			Console.CursorLeft = old_left;
-		}
-
-		public void printQuestions() {
+		public void PrintQuestions() {
 			Debug.WriteLine(questions.Count());
 		}
 	}

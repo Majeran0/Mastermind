@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mastermind {
 	class Config {
-		public int MaxTurns { get; set; }
-		public int MaxColors { get; set; }
+		public int MaxTurns { get; set; } = 12;
+		public int MaxColors { get; set; } = 4;
 	}
 }

@@ -9,7 +9,7 @@ namespace mastermind {
 
 		private static readonly Random rand = new Random();
 
-		public void generateSecret() {
+		public void GenerateSecret() {
 			for (int i = 0; i < colors; i++) secret.Add(rand.Next(1, colors));
 		}
 	}
