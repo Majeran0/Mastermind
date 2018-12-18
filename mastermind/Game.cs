@@ -104,7 +104,7 @@ namespace mastermind {
 
 
 			List<int> i_question = new List<int>(config.MaxColors);
-			foreach (char sign in question) i_question.Add((int)sign);
+			foreach (char sign in question) i_question.Add((int)sign - 48); //Możliwe że -48 jest zbędne, Stack overflow podpowiada że zmieni to "1" na 49 
 			questions.Add(i_question);
 			current++;
 
@@ -112,7 +112,7 @@ namespace mastermind {
 		}
 
 		public int GetCurrentTurns() {
-			return this.turns_left;
+			return turns_left;
 		}
 
 
