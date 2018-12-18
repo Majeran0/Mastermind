@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 
 namespace mastermind {
-	public class Game {
-		private static Game Instance = null;
-		protected Game() { }
+	public sealed class Game {
 
+		private static Game Instance = null;
+		private Game() { }
 		public static Game GetInstance() {
 			if (Instance == null) Instance = new Game();
 			return Instance;
@@ -98,8 +98,8 @@ namespace mastermind {
 		public void AddQuestion(string question) {
 			if (question == null) throw new Exception("Puste zapytanie!");
 			if (question.Length != config.MaxColors) throw new Exception("Zapytanie ma złą liczbę znaków!");
-			var is_digits_only = question.All(x => x >= '1' && x <= '8');
-			if (!is_digits_only) throw new Exception("Zapytanie może zawierać tylko liczby z zakresu 1-8!");
+			var is_digits_only = question.All(x => x >= '1' && x <= '6');
+			if (!is_digits_only) throw new Exception("Zapytanie może zawierać tylko liczby z zakresu 1-6!");
 
 
 			List<int> i_question = new List<int>(config.MaxColors);
@@ -112,11 +112,6 @@ namespace mastermind {
 
 		public int GetCurrentTurns() {
 			return turns_left;
-		}
-
-
-		public void PrintQuestions() {
-			Debug.WriteLine(questions.Count());
 		}
 	}
 }
