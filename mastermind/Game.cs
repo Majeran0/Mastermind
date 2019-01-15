@@ -100,10 +100,7 @@ namespace mastermind
 
             for (int i = 0; i < config.MaxColors; i++)
             {
-                for (int j = 0; j < config.MaxColors; j++)
-                {
-                    if (answer[i] != 2 && last_question[i] == secret[j] && i != j && answer[j] != 2) answer[i] = 1;
-                }
+                    if (answer[i] != 2 && secret.Contains(last_question[i])) answer[i] = 1;
             }
 
             answer.Sort();
